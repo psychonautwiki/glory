@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script type="text/javascript">
+window.addEventListener('load', () => {
+    const bn = io();
+
+    window.bn = bn;
+
+    class UserFlow {
+        constructor (bn) {
+            this.bn = bn;
+
+            this._setupListeners();
+            this._authorize();
+        }
+
+        _setupListeners() {
+            this.bn.on('ack', data => this._handleAck(data));
+        }
+
+        _authorize() {
+            this.bn.emit('auth', {
+                user: null,
+                token: null
+            });
+        }
+
+        _handleAck(args) {
+            console.log(args)
+        }
+    }
+
+    bn.on('connect', () => {
+        (new UserFlow(bn));
+    });
+});
+    </script>
+</head>
+<body>
+
+</body>
+</html>
